@@ -1,10 +1,12 @@
 # Mach-O-Walk
 
-This is a project to build a database of internal and external headers present in Mach-O files (typically found on MacOS).
+This is a project to build a database of internal and external headers, segments, sections and other data structures present in Mach-O files (typically found on MacOS).
 
-The main tool is called "machowalk" it analyses the Mach-O header of a program, library or framework and dumps all the information into JSON.
+The main tool is called "machowalk". It analyses the Mach-O header of a program, library or framework and dumps all the information into JSON.
 
 Why JSON? It allows for easier analysis in higher-level languages and it can be imported into databases easily.
+
+The aim is to analyse a large amount of files, in order to make inferences about the system internals of programs and Darwin/MacOS based systems. This is particularly useful for reverse engineering or malware analysis.
 
 ## Example
 This shows a snippet of a typical invokation. You can see the full output in [example_output.json](example_output.json).
