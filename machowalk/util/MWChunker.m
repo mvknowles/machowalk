@@ -52,7 +52,7 @@
     // find the null terminator:
     // we start nullLength at 0 to make sure we don't feed the null to NSString init
     
-    debug(@"maxbounds: %lu\n", (unsigned long)maxLength);
+    debug(@"maxbounds: %lu\n", (unsigned long)maxLength, NULL);
     NSUInteger nullLength = 0;
     while (checkBounds == false || nullLength < maxLength) {
         // this will throw if position invalid
@@ -84,12 +84,12 @@
 - (instancetype)init:(NSString*)path {
     self.path = path;
     
-    NSError *error;
+    NSError *error = nil;
     self.dataOffset = 0;
     data = [[NSData alloc] initWithContentsOfFile:path  options:NSDataReadingMappedIfSafe error:&error];
  
     if (error != nil) {
-        debug(@"Error: %@", error);
+        debug(@"Error: %@", error, NULL);
     }
     return self;
 }

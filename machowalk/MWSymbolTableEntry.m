@@ -44,11 +44,11 @@ static MWDefinitions *typeDefs;
     ];
     
     if ((self.value->n_type & N_STAB) > 0) {
-        debug(@"TODO: handlee N_STAB\n");
+        debug(@"TODO: handlee N_STAB\n", NULL);
     }
     
     if ((self.value->n_type & N_PEXT) > 0) {
-        debug(@"TODO: handle N_PEXT\n");
+        debug(@"TODO: handle N_PEXT\n", NULL);
     }
     
     if ((self.value->n_type & N_EXT) > 0) {
@@ -111,7 +111,7 @@ static MWDefinitions *typeDefs;
             
         default:
             if (self.value->n_sect != 0 || ordinal != 0) {
-                debug(@"Error: unhandled case with n_sect: %d and ordinal: %d, %@\n", self.value->n_sect, ordinal, self.type);
+                debug(@"Error: unhandled case with n_sect: %d and ordinal: %d, %@\n", self.value->n_sect, ordinal, self.type, NULL);
             }
     }
 }
@@ -119,7 +119,7 @@ static MWDefinitions *typeDefs;
 - (void)handleCommonSymbol {
     // n_value is the size of the common symbol
     if (self.value->n_sect != NO_SECT) {
-        debug(@"PROBLEM - n_sect shouldn't be set\n");
+        debug(@"PROBLEM - n_sect shouldn't be set\n", NULL);
     }
     
     uint16_t alignment = GET_COMM_ALIGN(self.value->n_desc);

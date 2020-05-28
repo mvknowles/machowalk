@@ -13,13 +13,13 @@
 
 #import "MWLoadCommand.h"
 #import "MWExportedSymbol.h"
-#import "MWDefinitions.h"
-#import "MWSerializerHints.h"
+#import "util/MWDefinitions.h"
+#import "util/MWSerializerHints.h"
 
 @interface MWDyldInfoCommand : MWLoadCommand <MWSerializerHints>
 @property (nonatomic) struct dyld_info_command *value;
-@property (nonatomic) MWDefinitions *bindOpcodeDefs;
-@property (nonatomic) NSMutableArray<MWExportedSymbol*> *exportedSymbols;
+@property (retain, nonatomic) MWDefinitions *bindOpcodeDefs;
+@property (retain, nonatomic) NSMutableArray<MWExportedSymbol*> *exportedSymbols;
 +(NSSet<NSString*>*)dontSerialize;
 @end
 

@@ -7,7 +7,6 @@
 //
 
 #include "dlfcn.h"
-#import <objc/runtime.h>
 #import <Foundation/Foundation.h>
 
 #import "machowalk.h"
@@ -16,6 +15,33 @@
 @implementation MWDebugStackEntry
 @synthesize target;
 @synthesize caller;
+
+- (NSUInteger)hash {
+    // isEqual will be called to check even if the hashes collide
+    return self.target.hash ^ self.caller.hash;
+}
+ 
+-(BOOL)isEqual:(id)other {
+    // nice and quick
+    if (other == self) {
+        return YES;
+    }
+    
+    if ([other isKindOfClass:[MWDebugStackEntry class]] == false) {
+        return NO;
+    }
+
+    MWDebugStackEntry *dse = (MWDebugStackEntry*)other;
+    
+    return [self.target isEqual:dse.target] && [self.caller isEqualToString:dse.caller] && ((self.details == nil && dse.details == nil) || [self.details isEqualToString:dse.details]);
+}
+    
+
+
+-(NSString*)description {
+    return [NSString stringWithFormat:@"%@ %@ %@ %lu", self.caller, self.target, self.details, (unsigned long)self.target.hash];
+}
+
 @end
 
 @implementation MWPropertyInfo
@@ -45,7 +71,7 @@
 
 @implementation MWSerializer
 
-@synthesize debugStack;
+@synthesize objectStack;
 @synthesize jsonMode;
 
 static NSSet<NSString*> *foundationClasses;
@@ -59,46 +85,66 @@ static NSSet<NSString*> *foundationClasses;
 }
 
 -(instancetype)init {
-    self.debugStack = [[NSMutableArray alloc] init];
+    self.objectStack = [NSMutableOrderedSet new];
     self.jsonMode = true;
     return self;
 }
 
 -(void)jsonify:(NSObject*)target {
     MWStdOutputStream *output = [MWStdOutputStream new];
-    NSError *error;
     NSObject *normalizedObject;
     
     normalizedObject = [self normalize:target];
     
+    NSError *error = nil;
     [NSJSONSerialization writeJSONObject:normalizedObject toStream:output options:NSJSONWritingPrettyPrinted error:&error];
-            
+    
     if (error != nil) {
-        NSLog(@"%@", error.debugDescription);
+        NSLog(@"%@", error);
     }
 }
 
 
--(void)stackDebug:(NSString*)format, ... {
-    NSMutableString *prefix = [[NSMutableString alloc] init];
-    for (MWDebugStackEntry *entry in self.debugStack) {
-        //NSLog(@"DEBUG: %@",entry);
-        [prefix appendFormat:@"%@(%@).", entry.target, entry.caller];
+-(void)stackDebug:(NSString*)format, ... {    
+    /*NSMutableString *prefix = [[NSMutableString alloc] init];
+    for (MWDebugStackEntry *entry in self.objectStack) {
+        [prefix appendFormat:@"%@ ", entry.target]; //, entry.caller];
     }
-    
-    NSString *newFormat = [NSString stringWithFormat:@"%@ %@", prefix, format];
-
+    */
+  
     va_list vargs;
     va_start(vargs, format);
-    debug(newFormat, vargs);
+    //NSString *newFormat = [[NSString alloc] initWithFormat:format arguments:vargs];
+    
+    //const char *c = newFormat.UTF8String;
+    
+    //printf("%s\n", c);
+    
+    
+    //NSLogv(format, vargs);
+    debug(format, vargs, NULL);
     va_end(vargs);
 }
 
--(void)debugStackPush:(NSObject*)target {
-    NSString *caller = [[NSThread callStackSymbols] objectAtIndex:1];
+-(void)stackPush:(NSObject*)target {
+    [self stackPushInternal:target withDetails:nil];
+}
+
+-(void)stackPush:(NSObject*)target withDetails:(NSString*)details {
+    [self stackPushInternal:target withDetails:details];
+}
+
+-(void)stackPushInternal:(NSObject*)target withDetails:(NSString*)details {
+    NSString *caller;
     NSError *error;
     
-    // this is annoyingly dumb
+    if ([objectStack count] > 10) {
+        NSLog(@"Object stack too large");
+        exit(3);
+    }
+    
+    caller = [[NSThread callStackSymbols] objectAtIndex:2];
+    // this is annoyingly dumb. Why can't we just get the underlying data in a non-string (in a way that is portable)
     NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:@"\\[.* (.*)\\]" options:0 error:&error];
     NSRange range = NSMakeRange(0, caller.length);
     NSArray *matches = [regex matchesInString:caller options:0 range:range];
@@ -110,49 +156,59 @@ static NSSet<NSString*> *foundationClasses;
     MWDebugStackEntry *entry = [[MWDebugStackEntry alloc] init];
     [entry setCaller:caller];
     [entry setTarget:[target className]];
+    [entry setDetails:details];
     
-    [self.debugStack addObject:entry];
+    if ([self.objectStack containsObject:entry]) {
+        NSMutableString *callStackLines = [NSMutableString stringWithString:[[self.objectStack array] componentsJoinedByString:@"\n"]];
+        // put the last "attemted" call on the stack
+        [callStackLines appendString:@"\n"];
+        [callStackLines appendString:[entry description]];
+        
+        NSString *reason = [NSString stringWithFormat:@"Serializer will loop with object %@\nCallstack:\n%@", [target className], callStackLines];
+        @throw([NSException exceptionWithName:NSInvalidArgumentException reason:reason userInfo:@{@"objectStack":self.objectStack}]);
+    }
+    
+    [self.objectStack addObject:entry];
 }
 
--(MWDebugStackEntry*)debugStackPop {
-    MWDebugStackEntry *pop = [self.debugStack lastObject];
-    [self.debugStack removeLastObject];
+-(MWDebugStackEntry*)stackPop {
+    MWDebugStackEntry *pop = [self.objectStack lastObject];
+    [self.objectStack removeObjectAtIndex:[self.objectStack count] - 1 ];
     return pop;
 }
 
 -(NSObject*)normalize:(NSObject*)target {
-    [self debugStackPush:target];
+    //MK [self stackPush:target];
     
     NSString *targetType = [[[target class] classForArchiver] className];
-    [self stackDebug:@"Taget type: %@, %@", targetType, [target class]];
+    [self stackDebug:@"Target type: %@, %@", targetType, [target class], nil];
     NSObject *result;
         
     if ([[target class] isSubclassOfClass:[NSArray class]]) {
-        [self stackDebug:@"process array"];
+        [self stackDebug:@"process array", nil];
         result = [self normalizeArray:(NSArray*)target];
-        [self debugStackPop];
+        //MK[self stackPop];
         return result;
     }
     
     //if ([targetType isEqual:@"NSMutableDictionary"] || [targetType isEqual:@"NSDictionary"]) {
     if ([[target class] isSubclassOfClass:[NSDictionary class]]) {
         result = [self normalizeDictionary:(NSDictionary*)target];
-        [self debugStackPop];
+        //mk [self stackPop];
         return result;
     }
     
     if ([[target class] isSubclassOfClass:[NSNumber class]] || [[target class] isSubclassOfClass:[NSString class]]) {
-        [self stackDebug:@"process string or number"];
+        [self stackDebug:@"process string or number", nil];
         result = target;
-        [self debugStackPop];
+        //mk [self stackPop];
         return result;
     }
         
-    [self stackDebug:@"process as object"];
+    [self stackDebug:@"process as object", nil];
     
-    // we pop the stack first because we're just doing ourselves again
     result = [self normalizeObject:target];
-    [self debugStackPop];
+    //[self stackPop];
     return result;
 }
 
@@ -161,15 +217,16 @@ static NSSet<NSString*> *foundationClasses;
     NSArray<MWPropertyInfo*> *propertyInfos;
     NSMutableSet<NSString*>*dontSerializeSet;
     
-    [self debugStackPush:target];
+    [self stackPush:target];
+    dontSerializeSet = [NSMutableSet new];;
     
     if ([target conformsToProtocol:@protocol(MWSerializerHints)]) {
-        [self stackDebug:@"%@ responds to hints", [target class]];
+        [self stackDebug:@"%@ responds to hints", [target class], nil];
         
         if ([target respondsToSelector:@selector(normalizerOverride)]) {
-            [self stackDebug:@"%@ has normalizerOverload", [target class]];
+            [self stackDebug:@"%@ has normalizerOverload", [target class], nil];
             result = [target performSelector:@selector(normalizerOverride)];
-            [self debugStackPop];
+            [self stackPop];
             return result;
         }
         
@@ -179,29 +236,28 @@ static NSSet<NSString*> *foundationClasses;
         // be serialized. If we just check the target, we don't get the full
         // set
         Class cls = [target class];
-        dontSerializeSet = [NSMutableSet new];
         while (cls != [NSObject class]) {
             if ([cls respondsToSelector:@selector(dontSerialize)]) {
                 [dontSerializeSet unionSet:[cls performSelector:@selector(dontSerialize)]];
             }
             cls = [cls superclass];
         }
-        [self stackDebug:@"dont list: %@", dontSerializeSet];
+        [self stackDebug:@"dont list: %@", dontSerializeSet, nil];
     }
     
-    propertyInfos = [self objectProperties:target];
+    propertyInfos = [MWSerializer newObjectPropertiesForObject:target];
     for (MWPropertyInfo *info in propertyInfos) {
         NSObject *normalized;
         NSObject *propertyValue;
-        [self stackDebug:@"PROP ANALYSE: %@",info.name];
+        [self stackDebug:@"PROP ANALYSE: %@",info.name, nil];
         
         if ([dontSerializeSet containsObject:info.name]) {
-            [self stackDebug:@"PROP: no serialize: %@", info.name];
+            [self stackDebug:@"PROP: no serialize: %@", info.name, nil];
             continue;
         }
 
         if (info.isKVC == false) {
-            [self stackDebug:@"PROP: Skip %@.%@", [target class], info.name];
+            [self stackDebug:@"PROP: Skip (not KVC) %@.%@", [target class], info.name, nil];
             continue;
         }
         
@@ -212,12 +268,13 @@ static NSSet<NSString*> *foundationClasses;
         }*/
         
         if (propertyValue == nil) {
-            [self stackDebug:@"PROP: property nil"];
+            [self stackDebug:@"PROP: property nil", nil];
             normalized = [[NSNull alloc] init];
         } else {
-            [self stackDebug:@"PROP: property needs normalizing further"];
+            [self stackDebug:@"PROP: property needs normalizing further", nil];
+            [self stackPush:target withDetails:info.name];
             normalized = [self normalize:propertyValue];
-            //normalized = [[NSNull alloc] init];
+            [self stackPop];
         }
         // nil is returned by normalize if object should be skipped
         if (normalized != nil) {
@@ -225,15 +282,7 @@ static NSSet<NSString*> *foundationClasses;
         }
     }
     
-    /*for (NSString *propertyName in propertyInfo) {
-        NSObject *normalized;
-        NSLog(@"Processing %@",propertyName);
-        
-        normalized = [self normalize:[target valueForKey:propertyName]];
-        [result setObject:normalized forKey:propertyName];
-    }*/
-    
-    [self debugStackPop];
+    [self stackPop];
     return result;
 }
 
@@ -247,13 +296,13 @@ static NSSet<NSString*> *foundationClasses;
 -(NSArray*)normalizeArray:(NSArray*)target {
     NSMutableArray *result = [[NSMutableArray alloc] init];
     
-    [self debugStackPush:target];
+    //mk[self stackPush:target];
     
     for (NSObject *o in target) {
         if ([result count] == 0) {
             if ([MWSerializer isFoundation:o]) {
                 // nothing needs t be done to array
-                [self debugStackPop];
+                //mk[self stackPop];
                 return target;
             }
         }
@@ -261,14 +310,14 @@ static NSSet<NSString*> *foundationClasses;
         //normalize the data
         [result addObject:[self normalize:o]];
     }
-    [self debugStackPop];
+    //mk[self stackPop];
     return result;
 }
 
 -(NSDictionary*)normalizeDictionary:(NSDictionary*)target {
     NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
     
-    [self debugStackPush:target];
+    //[self stackPush:target];
     
     for (NSObject *k in [target allKeys]) {
         NSObject *newKey = k;
@@ -278,7 +327,7 @@ static NSSet<NSString*> *foundationClasses;
             if ([MWSerializer isFoundation:k] && [MWSerializer isFoundation:v]) {
                 if (self.jsonMode == false || [k isKindOfClass:[NSString class]]) {
                     // nothing needs t be done to array
-                    [self debugStackPop];
+                    //[self stackPop];
                     return target;
                 }
             }
@@ -301,12 +350,12 @@ static NSSet<NSString*> *foundationClasses;
         [result setObject:v forKey:(NSObject<NSCopying>*)newKey];
     }
     
-    [self debugStackPop];
+    //[self stackPop];
     return result;
 }
 
 
--(NSMutableArray<MWPropertyInfo*>*)objectProperties:(NSObject*)target {
++(NSMutableArray<MWPropertyInfo*>*)newObjectPropertiesForObject:(const NSObject*)target {
 
     //NSMutableDictionary<NSString*,NSString*> *result = [[NSMutableDictionary alloc] init];
     NSMutableArray<MWPropertyInfo*> *results = [[NSMutableArray alloc] init];
@@ -315,7 +364,7 @@ static NSSet<NSString*> *foundationClasses;
     Class cls = [target class];
     while (cls != [NSObject class]) {
         //NSLog(@"doing class: %@, i=%d", cls, i);
-        [self addPropertiesForClass:cls results:&results];
+        [MWSerializer addPropertiesForClass:cls results:results];
         cls = [cls superclass];
         i++;
     }
@@ -323,56 +372,61 @@ static NSSet<NSString*> *foundationClasses;
     return results;
 }
 
--(void)addPropertiesForClass:(Class)target_class results:(NSMutableArray<MWPropertyInfo*>**)results {
++(void)addPropertiesForClass:(Class)target_class results:(const NSMutableArray<MWPropertyInfo*>*)results {
     
     unsigned int propertyCount;
     objc_property_t *properties;
-    
     properties = class_copyPropertyList(target_class, &propertyCount);
     
     for (int i = 0; i < propertyCount; i++) {
         MWPropertyInfo *propertyInfo;
         
-        propertyInfo = [self propertyInfoForProperty:&properties[i]];
+        propertyInfo = [MWSerializer newPropertyInfoForProperty:properties[i]];
         
         if (propertyInfo != nil) {
             //NSLog(@"%@", propertyInfo.name);
-            [*results addObject:propertyInfo];
+            [results addObject:propertyInfo];
         }
     }
     
     free(properties);
 }
 
--(MWPropertyInfo*)propertyInfoForProperty:(objc_property_t*)property {
++(MWPropertyInfo*)newPropertyInfoForProperty:(const objc_property_t)property {
     unsigned int attrCount;
     
-    objc_property_attribute_t *propAttrs = property_copyAttributeList(*property, &attrCount);
+    objc_property_attribute_t *propAttrs = property_copyAttributeList(property, &attrCount);
 
     MWPropertyInfo *propertyInfo = [[MWPropertyInfo alloc] init];
+    propertyInfo.isKVC = true;
+    
     for (int j=0; j < attrCount; j++) {
-        objc_property_attribute_t *attr = &propAttrs[j];
+        objc_property_attribute_t attr = propAttrs[j];
         
-        if (strlen(attr->name) <= 0) {
+        if (strlen(attr.name) <= 0) {
             continue;
         }
-        switch (attr->name[0]) {
+        switch (attr.name[0]) {
             case 'T':
-                if (strlen(attr->value) > 3) {
-                    propertyInfo.type = [[NSString alloc] initWithBytes:(attr->value + 2) length:strlen(attr->value) - 3 encoding:NSUTF8StringEncoding];
+                if (strlen(attr.value) > 0 && attr.value[0] == '^') {
+                    propertyInfo.isKVC = false;
                 }
+                propertyInfo.type = [[NSString stringWithUTF8String:attr.value] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"@\""]];
                 break;
             case 'V':
-                propertyInfo.name = [NSString stringWithUTF8String:attr->value];
+                // method I think
+                propertyInfo.name = [NSString stringWithUTF8String:attr.value];
                 break;
             case '&':
-                // i think this means KVC compliant
-                propertyInfo.isKVC = true;
+                // not sure
+                //propertyInfo.isKVC = true;
                 break;
             //default:
             //    printf("%s\n", attr->name);
         }
     }
+    
+    free(propAttrs);
     return propertyInfo;
 }
 

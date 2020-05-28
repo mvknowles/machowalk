@@ -9,8 +9,8 @@
 #ifndef MWSection64_h
 #define MWSection64_h
 
-#import "MWKeyValue.h"
 #import "MWMachElement.h"
+#import "util/MWKeyValue.h"
 
 @interface MWSection64 : MWMachElement
 @property (nonatomic) struct section_64 *value;

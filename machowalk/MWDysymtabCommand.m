@@ -13,7 +13,7 @@
 #import "MWDysymtabCommand.h"
 #import "MWSymbolTableEntry.h"
 #import "MWMachHeader64.h"
-#import "MWKeyValue.h"
+#import "util/MWKeyValue.h"
 
 @implementation MWDysymtabCommand
 
@@ -21,9 +21,9 @@
     self.value = [self.machOFile.chunker dataChunk:sizeof(struct dysymtab_command)];
     
     if ((self.machOFile.header.value->flags & MH_BINDATLOAD) > 0) {
-        debug(@"TODO: MH_BINDATLOAD found. Not handled (need to sort stuff");
+        debug(@"TODO: MH_BINDATLOAD found. Not handled (need to sort stuff", NULL);
     }
-    debug(@"TODO: sort the symbols into each table type");
+    debug(@"TODO: sort the symbols into each table type", NULL);
     // defined external symbols
     for (int i=0; i<self.value->nextdefsym;i++) {
         MWSymbolTableEntry *entry;
@@ -31,7 +31,7 @@
         
         tableIndex = self.value->iextdefsym + i;
         entry = [self.machOFile.symbolTableEntries objectAtIndex:tableIndex];
-        debug(@"External: %@", entry.name);
+        debug(@"External: %@", entry.name, NULL);
     }
     
     // undefined external symbols
@@ -41,7 +41,7 @@
         
         tableIndex = self.value->iundefsym + i;
         entry = [self.machOFile.symbolTableEntries objectAtIndex:tableIndex];
-        debug(@"Undefined: %@", entry.name);
+        debug(@"Undefined: %@", entry.name, NULL);
     }
 
     self.rawStruct = @[

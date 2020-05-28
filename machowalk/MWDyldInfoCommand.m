@@ -42,12 +42,12 @@ static MWDefinitions *bindOpcodeDefs;
 - (void) subprocess {
     self.value = [self.machOFile.chunker dataChunk:sizeof(struct dyld_info_command)];
     
-    debug(@"SUBPROC rebase %d\n", self.value->rebase_size);
-    debug(@"SUBPROC bind %d\n", self.value->bind_size);
-    debug(@"SUBPROC weak %d\n", self.value->weak_bind_size);
-    debug(@"SUBPROC lazy %d\n", self.value->lazy_bind_size);
-    debug(@"SUBPROC export %x\n", self.value->export_off);
-    debug(@"SUBPROC export %d\n", self.value->export_size);
+    debug(@"SUBPROC rebase %d\n", self.value->rebase_size, NULL);
+    debug(@"SUBPROC bind %d\n", self.value->bind_size, NULL);
+    debug(@"SUBPROC weak %d\n", self.value->weak_bind_size, NULL);
+    debug(@"SUBPROC lazy %d\n", self.value->lazy_bind_size, NULL);
+    debug(@"SUBPROC export %x\n", self.value->export_off, NULL);
+    debug(@"SUBPROC export %d\n", self.value->export_size, NULL);
 
     [self.machOFile.chunker setDataOffset:self.value->export_off];
     self.exportedSymbols = [[NSMutableArray alloc] init];
@@ -116,9 +116,6 @@ static MWDefinitions *bindOpcodeDefs;
 }
 
 +(NSSet<NSString*>*)dontSerialize {
-    /*NSSet *superSet = [super dontSerialize];
-    NSMutableSet *newSet = [NSMutableSet setWithSet:superSet];
-    [newSet addObject:@"_bindOpcodeDefs"];*/
     return [NSSet setWithObject:@"_bindOpcodeDefs"];
 }
 

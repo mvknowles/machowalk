@@ -19,7 +19,7 @@
 
 - (void)process {
     self.value = [self.machOFile.chunker dataChunk:sizeof(struct section_64)];
-    debug(@"MWSection64: sectname: %s segname: %s\n", self.value->sectname, self.value->segname);
+    debug(@"MWSection64: sectname: %s segname: %s\n", self.value->sectname, self.value->segname, NULL);
     
     self.segmentName = [NSString stringWithUTF8String:self.value->segname];
     self.sectionName = [NSString stringWithUTF8String:self.value->sectname];

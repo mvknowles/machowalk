@@ -63,7 +63,7 @@
         MWSymbolTableEntry *newSymbolTableEntry = [[MWSymbolTableEntry alloc] init:self.machOFile];
         [newSymbolTableEntry process];
         [self.machOFile.symbolTableEntries addObject:newSymbolTableEntry];
-        debug(@"%@", newSymbolTableEntry);
+        debug(@"%@", newSymbolTableEntry, NULL);
         // entry->n_un.n_strx is the *offset* into the string table, not an index
         //printf("%x\n", entry->n_un.n_strx);
     }

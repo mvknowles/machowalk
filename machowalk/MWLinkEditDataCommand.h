@@ -13,7 +13,7 @@
 #include "mach-o/loader.h"
 
 #import "MWLoadCommand.h"
-#import "MWDefinedNumber.h"
+#import "util/MWDefinedNumber.h"
 
 @interface MWLinkEditDataCommand : MWLoadCommand
 @property (nonatomic) struct linkedit_data_command *value;

@@ -9,8 +9,8 @@
 #ifndef MWMachOFile_h
 #define MWMachOFile_h
 
-#import "MWChunker.h"
-#import "MWSerializerHints.h"
+#import "util/MWChunker.h"
+#import "util/MWSerializerHints.h"
 
 @class MWMachHeader64;
 @class MWSymbolTableEntry;

@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 
 #import "MWBuildVersionCommand.h"
-#import "MWKeyValue.h"
-#import "MWDefinitions.h"
+#import "util/MWKeyValue.h"
+#import "util/MWDefinitions.h"
 
 @implementation MWBuildTool
 @synthesize name;

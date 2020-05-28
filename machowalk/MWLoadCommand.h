@@ -12,7 +12,7 @@
 #include "mach-o/loader.h"
 
 #import "MWMachElement.h"
-#import "MWDefinedNumber.h"
+#import "util/MWDefinedNumber.h"
 
 @interface MWLoadCommand : MWMachElement
 @property (nonatomic) struct load_command *preamble;

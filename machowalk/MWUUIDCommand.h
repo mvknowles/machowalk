@@ -12,7 +12,7 @@
 #include "mach-o/loader.h"
 
 #import "MWLoadCommand.h"
-#import "MWSerializerHints.h"
+#import "util/MWSerializerHints.h"
 
 @interface MWUUIDCommand : MWLoadCommand // <MWSerializerHints>
 @property (nonatomic) struct uuid_command *value;

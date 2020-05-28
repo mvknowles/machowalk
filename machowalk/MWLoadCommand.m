@@ -86,12 +86,9 @@ static MWDefinitions *loadCommandTypes;
             n = [[MWLinkEditDataCommand alloc] init:preamble machOFile:machOFile];
             break;
         default:
-            debug(@"Unhandled load cmd %x\n", preamble->cmd);
+            n = [[MWLoadCommand alloc] init:preamble machOFile:machOFile];
+            debug(@"Unhandled load cmd %x\n", preamble->cmd, nil);
             break;
-    }
-    
-    if (n == nil) {
-        n = [[MWLoadCommand alloc] init:preamble machOFile:machOFile];
     }
 
     return n;

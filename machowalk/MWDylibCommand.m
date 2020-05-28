@@ -16,20 +16,10 @@
 @synthesize currentVersionParts;
 @synthesize compatibilityVersion;
 @synthesize compatibilityVersionParts;
-/*-(instancetype) init:(struct load_command*)preamble {
-    self = [super init:preamble];
- */
 
 -(void) subprocess {
     //self.value = bufChunk(sizeof(struct dylib_command));
     self.value = [self.machOFile.chunker dataChunk:sizeof(struct dylib_command) increment:true];
-    
-    /*
-    NSRange nameRange = NSMakeRange([self.machOFile.chunker dataOffset] + self.value->dylib.name.offset, self.preamble->cmdsize - self.value->dylib.name.offset);
-    
-    NSLog(@"%lu, %lu, %u", (unsigned long)nameRange.location, (unsigned long)nameRange.length, self.value->dylib.name.offset);
-    self.name = [self.machOFile.chunker stringChunk:nameRange];
-    */
     
     NSUInteger maxNameLength = self.value->cmdsize - self.value->dylib.name.offset;
     

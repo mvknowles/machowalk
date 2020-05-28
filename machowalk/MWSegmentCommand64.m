@@ -10,7 +10,7 @@
 
 #import "machowalk.h"
 #import "MWSegmentCommand64.h"
-#import "MWKeyValue.h"
+#import "util/MWKeyValue.h"
 
 @implementation MWSegmentCommand64
 @synthesize sections;
@@ -28,7 +28,7 @@
         MWSection64 *section = [[MWSection64 alloc] init:self.machOFile];
         [section process];
         [sections addObject:section];
-        debug(@"%@", section);
+        debug(@"%@", section, NULL);
     }
     
     self.rawStruct = @[

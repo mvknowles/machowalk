@@ -12,7 +12,7 @@
 #include "mach-o/loader.h"
 
 #import "MWLoadCommand.h"
-#import "MWDefinedNumber.h"
+#import "util/MWDefinedNumber.h"
 
 @interface MWBuildTool : NSObject
 @property (nonatomic) NSObject *name;

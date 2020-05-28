@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import "MWSourceVersionCommand.h"
-#import "MWKeyValue.h"
+#import "util/MWKeyValue.h"
 
 @implementation MWSourceVersionCommand
 @synthesize version;

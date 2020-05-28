@@ -10,14 +10,14 @@
 #define MWExportedSymbol_h
 
 #import "MWMachElement.h"
-#import "MWDefinedNumber.h"
-#import "MWSerializerHints.h"
+#import "util/MWDefinedNumber.h"
+#import "util/MWSerializerHints.h"
 
 @interface MWExportedSymbol : MWMachElement <MWSerializerHints>
-@property (nonatomic) NSNumber *offset;
-@property (nonatomic) NSString *symbol;
-@property (nonatomic) MWDefinedNumber* kind;
-@property (nonatomic) NSArray<MWDefinedNumber*> *flags;
+@property (retain, nonatomic) NSNumber *offset;
+@property (retain, nonatomic) NSString *symbol;
+@property (retain, nonatomic) MWDefinedNumber* kind;
+@property (retain, nonatomic) NSArray<MWDefinedNumber*> *flags;
 +(instancetype) createFromFlags:(uint8_t)flags symbol:(NSString*)symbol machOFile:(MWMachOFile*)machOFile;
 +(NSSet<NSString*>*)dontSerialize;
 @end

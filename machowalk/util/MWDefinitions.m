@@ -29,7 +29,7 @@
 - (MWDefinedNumber*)get:value {
     NSString *name = self.mappings[value];
     if (name == nil) {
-        debug(@"ERROR: undefined name for path: %@ val:%@", path, value);
+        debug(@"ERROR: undefined name for path: %@ val:%@", path, value, nil);
         name = @"UNDEFINED";
     }
     
@@ -37,7 +37,7 @@
 }
 
 - (NSMutableArray<MWDefinedNumber*>*)getFlags:(NSNumber*)flags {
-    NSMutableArray<MWDefinedNumber*> *namedFlags;
+    NSMutableArray<MWDefinedNumber*> *namedFlags = [NSMutableArray new];
     NSUInteger uniqueFlag = 0;
     
     for (NSNumber *n in self.mappings.allKeys) {

@@ -10,7 +10,7 @@
 
 #import "machowalk.h"
 #import "MWMachHeader64.h"
-#import "MWDefinitions.h"
+#import "util/MWDefinitions.h"
 
 @implementation MWMachHeader64
 static MWDefinitions *magicDefs;
@@ -56,7 +56,7 @@ static MWDefinitions *fileTypeDefinitions;
         MWLoadCommand *lc = [MWLoadCommand createFromPreamble:self.machOFile];
         [lc process];
         [self.machOFile.loadCommands addObject:lc];
-        debug(@"%@", lc);
+        debug(@"%@", lc, NULL);
     }
 
     self.rawStruct = @[

@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:machowalk.xcodeproj">
+      location = "group:/Users/mark/scm/machowalk/machowalk/main.m">
+   </FileRef>
+   <FileRef
+      location = "self:">
    </FileRef>
 </Workspace>

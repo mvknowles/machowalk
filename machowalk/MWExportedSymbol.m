@@ -11,11 +11,11 @@
 
 #import "machowalk.h"
 #import "MWExportedSymbol.h"
-#import "MWDefinitions.h"
+#import "util/MWDefinitions.h"
 
 
 @interface MWExportedSymbolNormal : MWExportedSymbol
-@property (nonatomic) NSNumber *contentOffset;
+@property (retain, nonatomic) NSNumber *contentOffset;
 @end
 
 @implementation MWExportedSymbolNormal
@@ -26,13 +26,14 @@
     [self setContentOffset: [NSNumber numberWithUnsignedLongLong:contentOffset]];
 }
 -(NSString*)description {
+    return @"";
     return [NSString stringWithFormat:@"%@ %#llx", [super description], self.contentOffset.unsignedLongLongValue];
 }
 @end
 
 @interface MWExportedSymbolReexport : MWExportedSymbol
-@property (nonatomic) NSNumber *libraryOrdinal;
-@property (nonatomic) NSString *reexportedSymbol;
+@property (retain, nonatomic) NSNumber *libraryOrdinal;
+@property (retain, nonatomic) NSString *reexportedSymbol;
 @end
 
 @implementation MWExportedSymbolReexport
@@ -49,13 +50,13 @@
     // null-terminated UTF-8 byte sequence follows
     reexportSymbol = [self.machOFile.chunker readUTF8String];
     [self setReexportedSymbol:reexportSymbol];
-    debug(@"TO TEST: EXPORT_SYMBOL_FLAGS_REEXPORT: %@", reexportSymbol);
+    debug(@"TO TEST: EXPORT_SYMBOL_FLAGS_REEXPORT: %@", reexportSymbol, nil);
 }
 @end
 
 @interface MWExportedSymbolStub : MWExportedSymbol
-@property (nonatomic) NSNumber *stubOffset;
-@property (nonatomic) NSNumber *stubResolverOffset;
+@property (retain, nonatomic) NSNumber *stubOffset;
+@property (retain, nonatomic) NSNumber *stubResolverOffset;
 @end
 
 @implementation MWExportedSymbolStub
@@ -114,15 +115,15 @@ static MWDefinitions *flagDefs;
             n = [[MWExportedSymbolReexport alloc] init:machOFile];
             break;
         case EXPORT_SYMBOL_FLAGS_STUB_AND_RESOLVER:
-            debug(@"TO TEST: EXPORT_SYMBOL_FLAGS_STUB_AND_RESOLVER\n");
+            debug(@"TO TEST: EXPORT_SYMBOL_FLAGS_STUB_AND_RESOLVER\n", NULL);
             if (exportKind == EXPORT_SYMBOL_FLAGS_KIND_THREAD_LOCAL || exportKind == EXPORT_SYMBOL_FLAGS_KIND_ABSOLUTE) {
                 // this is invalid. dyld will not allow this
-                debug(@"ERROR: NOT STUB RESOLVER NOT ALLOWED FOR KIND");
+                debug(@"ERROR: NOT STUB RESOLVER NOT ALLOWED FOR KIND", NULL);
             }
             n = [[MWExportedSymbolStub alloc] init:machOFile];
             break;
         default:
-            debug(@"ERROR: unhandled export symbol flags: %d", exportFlags);
+            debug(@"ERROR: unhandled export symbol flags: %d", exportFlags, NULL);
             n = [[MWExportedSymbol alloc] init];
     }
     
@@ -140,10 +141,6 @@ static MWDefinitions *flagDefs;
 }
 
 +(NSSet<NSString*>*)dontSerialize {
-    /*NSSet *superSet = [super dontSerialize];
-    NSMutableSet *newSet = [NSMutableSet setWithSet:superSet];
-    [newSet addObject:@"origStruct"];
-    return newSet;*/
     return [NSSet setWithObject:@"origStruct"];
 }
 

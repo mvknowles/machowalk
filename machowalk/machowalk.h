@@ -9,6 +9,6 @@
 #ifndef machowalk_h
 #define machowalk_h
 
-void debug(NSString *format, ...);
+void debug(NSString *format, ...) NS_REQUIRES_NIL_TERMINATION;
 
 #endif /* machowalk_h */

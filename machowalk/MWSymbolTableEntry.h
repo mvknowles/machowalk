@@ -12,8 +12,8 @@
 #include <mach-o/nlist.h>
 
 #import "MWMachElement.h"
-#import "MWDefinitions.h"
-#import "MWDefinedNumber.h"
+#import "util/MWDefinitions.h"
+#import "util/MWDefinedNumber.h"
 
 @interface MWSymbolTableEntry : MWMachElement
 @property (nonatomic) struct nlist_64 *value;

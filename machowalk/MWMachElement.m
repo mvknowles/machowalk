@@ -24,7 +24,7 @@
 }
 
 - (void)process {
-    debug(@"ERROR: you should have overridden process");
+    debug(@"ERROR: you should have overridden process", NULL);
 }
 
 -(NSDictionary<NSString*,NSObject*>*) origStruct {

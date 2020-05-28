@@ -14,7 +14,6 @@
 		4D812475247E9F4D00FDD775 /* MWBuildVersionCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D812456247E9F4B00FDD775 /* MWBuildVersionCommand.m */; };
 		4D812476247E9F4D00FDD775 /* MWLinkEditDataCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D812458247E9F4B00FDD775 /* MWLinkEditDataCommand.m */; };
 		4D812477247E9F4D00FDD775 /* MWUUIDCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D81245C247E9F4B00FDD775 /* MWUUIDCommand.m */; };
-		4D812478247E9F4D00FDD775 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D81245E247E9F4B00FDD775 /* main.m */; };
 		4D812479247E9F4D00FDD775 /* MWMachElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D81245F247E9F4B00FDD775 /* MWMachElement.m */; };
 		4D81247A247E9F4D00FDD775 /* MWMachHeader64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D812460247E9F4B00FDD775 /* MWMachHeader64.m */; };
 		4D81247B247E9F4D00FDD775 /* MWDylibCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D812464247E9F4C00FDD775 /* MWDylibCommand.m */; };
@@ -24,6 +23,12 @@
 		4D81247F247E9F4D00FDD775 /* MWMachOFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D812469247E9F4C00FDD775 /* MWMachOFile.m */; };
 		4D812480247E9F4D00FDD775 /* MWDysymtabCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D81246B247E9F4D00FDD775 /* MWDysymtabCommand.m */; };
 		4D812481247E9F4D00FDD775 /* MWSection64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D81246D247E9F4D00FDD775 /* MWSection64.m */; };
+		4DFD49B1247F50DB0083AE22 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DFD49B0247F50DB0083AE22 /* main.m */; };
+		4DFD49C0247F52FE0083AE22 /* MWDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DFD49B6247F52FD0083AE22 /* MWDefinitions.m */; };
+		4DFD49C1247F52FE0083AE22 /* MWSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DFD49B7247F52FD0083AE22 /* MWSerializer.m */; };
+		4DFD49C2247F52FE0083AE22 /* MWChunker.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DFD49BB247F52FE0083AE22 /* MWChunker.m */; };
+		4DFD49C3247F52FE0083AE22 /* MWDefinedNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DFD49BC247F52FE0083AE22 /* MWDefinedNumber.m */; };
+		4DFD49C4247F52FE0083AE22 /* MWKeyValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DFD49BE247F52FE0083AE22 /* MWKeyValue.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -55,7 +60,6 @@
 		4D81245B247E9F4B00FDD775 /* MWDyldInfoCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWDyldInfoCommand.h; sourceTree = "<group>"; };
 		4D81245C247E9F4B00FDD775 /* MWUUIDCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWUUIDCommand.m; sourceTree = "<group>"; };
 		4D81245D247E9F4B00FDD775 /* MWLinkEditDataCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWLinkEditDataCommand.h; sourceTree = "<group>"; };
-		4D81245E247E9F4B00FDD775 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = "../../macho-learning/MachOPlay/machowalk/main.m"; sourceTree = "<group>"; };
 		4D81245F247E9F4B00FDD775 /* MWMachElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWMachElement.m; sourceTree = "<group>"; };
 		4D812460247E9F4B00FDD775 /* MWMachHeader64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWMachHeader64.m; sourceTree = "<group>"; };
 		4D812461247E9F4C00FDD775 /* MWSourceVersionCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWSourceVersionCommand.h; sourceTree = "<group>"; };
@@ -74,9 +78,20 @@
 		4D81246E247E9F4D00FDD775 /* MWExportedSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWExportedSymbol.h; sourceTree = "<group>"; };
 		4D81246F247E9F4D00FDD775 /* MWSegmentCommand64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWSegmentCommand64.h; sourceTree = "<group>"; };
 		4D812470247E9F4D00FDD775 /* MWUUIDCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWUUIDCommand.h; sourceTree = "<group>"; };
-		4D812482247E9F7100FDD775 /* util */ = {isa = PBXFileReference; lastKnownFileType = folder; path = util; sourceTree = "<group>"; };
 		4D812483247E9F8100FDD775 /* example_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = example_output.json; sourceTree = "<group>"; };
 		4D812484247E9F8100FDD775 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		4DFD49B0247F50DB0083AE22 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4DFD49B5247F52FD0083AE22 /* MWSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWSerializer.h; sourceTree = "<group>"; };
+		4DFD49B6247F52FD0083AE22 /* MWDefinitions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWDefinitions.m; sourceTree = "<group>"; };
+		4DFD49B7247F52FD0083AE22 /* MWSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWSerializer.m; sourceTree = "<group>"; };
+		4DFD49B8247F52FD0083AE22 /* MWKeyValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWKeyValue.h; sourceTree = "<group>"; };
+		4DFD49B9247F52FD0083AE22 /* MWDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWDefinitions.h; sourceTree = "<group>"; };
+		4DFD49BA247F52FD0083AE22 /* MWSerializerHints.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWSerializerHints.h; sourceTree = "<group>"; };
+		4DFD49BB247F52FE0083AE22 /* MWChunker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWChunker.m; sourceTree = "<group>"; };
+		4DFD49BC247F52FE0083AE22 /* MWDefinedNumber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWDefinedNumber.m; sourceTree = "<group>"; };
+		4DFD49BD247F52FE0083AE22 /* MWDefinedNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWDefinedNumber.h; sourceTree = "<group>"; };
+		4DFD49BE247F52FE0083AE22 /* MWKeyValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWKeyValue.m; sourceTree = "<group>"; };
+		4DFD49BF247F52FE0083AE22 /* MWChunker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWChunker.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,9 +126,8 @@
 		4D812447247E9F1F00FDD775 /* machowalk */ = {
 			isa = PBXGroup;
 			children = (
-				4D812482247E9F7100FDD775 /* util */,
+				4DFD49B4247F52E80083AE22 /* util */,
 				4D81245A247E9F4B00FDD775 /* machowalk.h */,
-				4D81245E247E9F4B00FDD775 /* main.m */,
 				4D81244F247E9F4A00FDD775 /* MWBuildVersionCommand.h */,
 				4D812456247E9F4B00FDD775 /* MWBuildVersionCommand.m */,
 				4D81245B247E9F4B00FDD775 /* MWDyldInfoCommand.h */,
@@ -146,8 +160,27 @@
 				4D812468247E9F4C00FDD775 /* MWSymtabCommand.m */,
 				4D812470247E9F4D00FDD775 /* MWUUIDCommand.h */,
 				4D81245C247E9F4B00FDD775 /* MWUUIDCommand.m */,
+				4DFD49B0247F50DB0083AE22 /* main.m */,
 			);
 			path = machowalk;
+			sourceTree = "<group>";
+		};
+		4DFD49B4247F52E80083AE22 /* util */ = {
+			isa = PBXGroup;
+			children = (
+				4DFD49BF247F52FE0083AE22 /* MWChunker.h */,
+				4DFD49BB247F52FE0083AE22 /* MWChunker.m */,
+				4DFD49BD247F52FE0083AE22 /* MWDefinedNumber.h */,
+				4DFD49BC247F52FE0083AE22 /* MWDefinedNumber.m */,
+				4DFD49B9247F52FD0083AE22 /* MWDefinitions.h */,
+				4DFD49B6247F52FD0083AE22 /* MWDefinitions.m */,
+				4DFD49B8247F52FD0083AE22 /* MWKeyValue.h */,
+				4DFD49BE247F52FE0083AE22 /* MWKeyValue.m */,
+				4DFD49B5247F52FD0083AE22 /* MWSerializer.h */,
+				4DFD49B7247F52FD0083AE22 /* MWSerializer.m */,
+				4DFD49BA247F52FD0083AE22 /* MWSerializerHints.h */,
+			);
+			path = util;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -213,16 +246,21 @@
 				4D81247F247E9F4D00FDD775 /* MWMachOFile.m in Sources */,
 				4D812481247E9F4D00FDD775 /* MWSection64.m in Sources */,
 				4D812472247E9F4D00FDD775 /* MWSegmentCommand64.m in Sources */,
+				4DFD49C0247F52FE0083AE22 /* MWDefinitions.m in Sources */,
 				4D812475247E9F4D00FDD775 /* MWBuildVersionCommand.m in Sources */,
 				4D812477247E9F4D00FDD775 /* MWUUIDCommand.m in Sources */,
+				4DFD49C3247F52FE0083AE22 /* MWDefinedNumber.m in Sources */,
 				4D812471247E9F4D00FDD775 /* MWSymbolTableEntry.m in Sources */,
 				4D81247C247E9F4D00FDD775 /* MWLoadCommand.m in Sources */,
 				4D812480247E9F4D00FDD775 /* MWDysymtabCommand.m in Sources */,
+				4DFD49C4247F52FE0083AE22 /* MWKeyValue.m in Sources */,
+				4DFD49C1247F52FE0083AE22 /* MWSerializer.m in Sources */,
 				4D812476247E9F4D00FDD775 /* MWLinkEditDataCommand.m in Sources */,
+				4DFD49C2247F52FE0083AE22 /* MWChunker.m in Sources */,
+				4DFD49B1247F50DB0083AE22 /* main.m in Sources */,
 				4D81247A247E9F4D00FDD775 /* MWMachHeader64.m in Sources */,
 				4D81247D247E9F4D00FDD775 /* MWDyldInfoCommand.m in Sources */,
 				4D812479247E9F4D00FDD775 /* MWMachElement.m in Sources */,
-				4D812478247E9F4D00FDD775 /* main.m in Sources */,
 				4D812474247E9F4D00FDD775 /* MWExportedSymbol.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -342,20 +380,26 @@
 		4D81244D247E9F1F00FDD775 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = Z5F3U7NCAF;
 				ENABLE_HARDENED_RUNTIME = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 			};
 			name = Debug;
 		};
 		4D81244E247E9F1F00FDD775 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = Z5F3U7NCAF;
 				ENABLE_HARDENED_RUNTIME = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 			};
 			name = Release;
 		};

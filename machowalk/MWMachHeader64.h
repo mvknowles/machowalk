@@ -11,10 +11,11 @@
 
 #include <mach-o/loader.h>
 
-#import "MWDefinitions.h"
-#import "MWDefinedNumber.h"
 #import "MWLoadCommand.h"
 #import "MWMachElement.h"
+#import "util/MWDefinitions.h"
+#import "util/MWDefinedNumber.h"
+
 
 @interface MWMachHeader64 : MWMachElement
 

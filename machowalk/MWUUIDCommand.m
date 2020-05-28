@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-#import "MWKeyValue.h"
 #import "MWUUIDCommand.h"
-#import "MWSerializerHints.h"
+#import "util/MWKeyValue.h"
+#import "util/MWSerializerHints.h"
 
 @interface NSUUID (Serializable) <MWSerializerHints>
 -(NSObject*)normalizerOverride;

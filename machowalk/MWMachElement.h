@@ -9,10 +9,9 @@
 #ifndef MWMachElement_h
 #define MWMachElement_h
 
-#import "MWChunker.h"
 #import "MWMachOFile.h"
-#import "MWKeyValue.h"
-#import "MWSerializerHints.h"
+#import "util/MWKeyValue.h"
+#import "util/MWSerializerHints.h"
 
 @interface MWMachElement : NSObject <MWSerializerHints>
 
