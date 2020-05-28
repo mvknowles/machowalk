@@ -6,10 +6,12 @@ The main tool is called "machowalk". It analyses the Mach-O header of a program,
 
 Why JSON? It allows for easier analysis in higher-level languages and it can be imported into databases easily.
 
-The aim is to analyse a large amount of files, in order to make inferences about the system internals of programs and Darwin/MacOS based systems. This is particularly useful for reverse engineering or malware analysis.
+The eventual aim is to analyse a large amount of Mach-O files and build up a database with the information. This allows inferences to be made about internal data structures that are opaque when analysed in isolation. Put another way, it's great for reverse engineering the guts of Darwin/MacOS based programs. This is particularly useful for reverse engineering or malware analysis.
 
 ## Example
-This shows a snippet of a typical invokation. You can see the full output in [example_output.json](example_output.json).
+The following output shows the partial output of the program, invoked on a very simple binary. You can see the full output in [example_output.json](example_output.json). For a far more complex example, take a look in [example_complex.json](example_complex.json). It will illustrate just how much information can be packed into a Mach-O binary.
+
+Short example output:
 
 ```
 machowalk /System/Library/PrivateFrameworks/SharingXPCServices.framework/SharingXPCServices
