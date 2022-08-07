@@ -2,7 +2,7 @@
 
 This is a project to build a database of internal and external headers, segments, sections and other data structures present in Mach-O files (typically found on MacOS).
 
-The main tool is called "machowalk". It analyses the Mach-O header of a program, library or framework and dumps all the information into JSON.
+The main tool is called "machowalk". machowalk analyses Mach-O binaries and prints headers, dynamic linker information, symbols, strings, functions, relocation tables and other structures to JSON.
 
 Why JSON? It allows for easier analysis in higher-level languages and it can be imported into databases easily.
 
