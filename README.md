@@ -1,6 +1,6 @@
 # Mach-O-Walk
 
-This is a project to build a database of internal and external headers, segments, sections and other data structures present in Mach-O files (typically found on MacOS).
+This is a project to build a database of internal and external headers, segments, sections and other data structures, colloquially known as "walking" the structures, present in Mach-O files (typically found on MacOS).
 
 The main tool is called "machowalk". machowalk analyses Mach-O binaries and prints headers, dynamic linker information, symbols, strings, functions, relocation tables and other structures to JSON.
 
